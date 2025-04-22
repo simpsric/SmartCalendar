@@ -1,0 +1,18 @@
+classDiagram
+    class Viewer {
+        +data_storage DataController
+        +controller Controller
+        +button[] ui_buttons
+        +gui open()
+        +gui update()
+        +gui close()
+    }
+    class button {
+        +string button_name
+        +string button_action
+        +void click()
+    }
+
+    Viewer "1" --> "1..*" button : Contains
+    Viewer "1" --> "1" DataController : Gets Data From
+    Viewer "1" --> "1" Controller : Sends Commands To

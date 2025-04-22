@@ -1,0 +1,37 @@
+classDiagram
+    class Controller {
+        +int threads_avail
+        +int threads_running
+        +int threads_max
+        +Month current_month
+        +RunnerThread runner_thread
+        +data_storage DataController
+        +void start()
+        +void stop()
+        +void add_event(events event)
+        +void remove_event(events event)
+        +void update_event(events event)
+        +events[] get_events()
+    }
+    class recurring_event {
+        +events event
+        +int recurrence_interval: daily, weekly, monthly, etc
+        +int recurrence_frequency: every 2 weeks, etc
+        +int recurrence_day: every friday, etc
+        +int reccurence_date: on the 29th, etc
+        +string recurrence_type
+        +int recurrence_count
+        +string recurrence_end_date
+        +string recurrence_end_condition
+        +string recurrence_exceptions
+        +string recurrence_notes
+    }
+    class RunnerThread {
+        +int thread_id
+        +int is_running
+        +event_list
+        +void run()
+    }
+
+    Controller "1" --> "1" RunnerThread : calls when needed
+    RunnerThread "1" --> "1..*" recurring_event : manages

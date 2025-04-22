@@ -1,0 +1,52 @@
+classDiagram
+    class DataController {
+        +void start()
+        +void stop()
+        +void add_event(events event)
+        +void remove_event(events event)
+        +void update_event(events event)
+        +events[] get_events(datetime range)
+    }
+    class Month {
+        +int month
+        +int year
+        +events[] events
+        +int get_month()
+        +int get_year()
+        +events[] get_events()
+        +void add_event(events event)
+        +void remove_event(events event)
+        +void update_event(events event)
+    }
+    class events {
+        +int event_id
+        +string event_name
+        +string event_description
+        +Month event_date
+        +int event_time
+        +string event_location
+        +string event_type
+        +string event_status
+        +string event_priority
+        +string event_notes
+        +string event_reminder
+    }
+    class StorageRunner {
+        <<backgroundThread>>
+        note: Intended for during start up*
+        or shut down to bring in/push out events*
+        +int thread_id
+        +int is_running
+        +YAMLStorage storage
+        +void run()
+    }
+    class YAMLStorage {
+        +string file_name: "may2025.yaml"
+        +void save_events(events[] events)
+        +events[] load_events()
+    }
+
+    Month "1" --> "*" events : contains
+    StorageRunner <|-- YAMLStorage
+    DataController "1" --> "1..*" Month : handles
+    DataController "1" --> "1" StorageRunner : uses
