@@ -1,4 +1,6 @@
 import datetime
+import yaml
+import os, sys
 
 class Events:
     def __init__(self,
@@ -160,19 +162,90 @@ class DataController:
         Initialize the DataController with an empty list of months.
         '''
         self._months = []
-        self.demo_start_up()
+        self._start_up()
     
     def _start_up(self):
         '''
         Start up the DataController by loading data from the database.
         '''
-        raise Exception("Not implemented")
+        # load data from the 'data_storage' directory
+        # For each month, load the events from the database
+        file_list = os.listdir("data_storage")
+        current_date = datetime.datetime.now()
+        current_month = current_date.month
+        current_year = current_date.year
+
+        # Calculate the range of months to include
+        start_month = (current_month - 2) % 12 or 12
+        start_year = current_year if current_month > 2 else current_year - 1
+        end_month = (current_month + 2) % 12 or 12
+        end_year = current_year if current_month <= 10 else current_year + 1
+
+        #print the month ranges to console
+        print(f"Loading events from {start_month}/{start_year} to {end_month}/{end_year}")
+                    
+        for file_name in file_list:
+            # check if the file is a yaml file
+            if file_name.endswith(".yaml"):
+                # load the events from the yaml file, using the yaml module
+                with open(f"data_storage/{file_name}", 'r') as file:
+                    data = yaml.safe_load(file)
+                    
+                    
+                    # Skip months outside the range
+                    if not data or \
+                       (data['year'] < start_year or (data['year'] == start_year and data['month'] < start_month)) or \
+                       (data['year'] > end_year or (data['year'] == end_year and data['month'] > end_month)):
+                        continue
+                    month = Month(data['month'], data['year'])
+                    for event_data in data["events"]:
+                        event = Events(
+                            event_id=event_data["event_id"],
+                            event_name=event_data["event_name"],
+                            event_description=event_data["event_description"],
+                            event_date=datetime.datetime.strptime(event_data["event_date"], "%Y-%m-%d"),
+                            event_time=datetime.datetime.strptime(event_data["event_time"], "%H:%M") if event_data["event_time"] else None,
+                            event_location=event_data["event_location"],
+                            event_type=event_data["event_type"],
+                            event_status=event_data["event_status"],
+                            event_priority=event_data["event_priority"],
+                            event_notes=event_data["event_notes"],
+                            event_reminder=datetime.datetime.strptime(event_data["event_reminder"], "%Y-%m-%d %H:%M") if event_data["event_reminder"] else None,
+                        )
+                        month.add_event(event)
+                    self._months.append(month)
     
-    def _shut_down(self):
+    def shut_down(self):
         '''
         Shut down the DataController by saving data to the database.
         '''
-        raise Exception("Not implemented")
+        # For each month, save the events to the database
+        for month in self._months:
+            # create a yaml file name based on month and year
+            file_name = f"data_storage/{datetime.date(1900, month.get_month(), 1).strftime('%B').lower()}{month.get_year()}.yaml"
+            # save the events to the yaml file, using the yaml module
+            with open(file_name, 'w') as file:
+                data = {
+                    "month": month.get_month(),
+                    "year": month.get_year(),
+                    "events": [
+                        {
+                            "event_id": event.event_id,
+                            "event_name": event.event_name,
+                            "event_description": event.event_description,
+                            "event_date": event.print_date(),
+                            "event_time": event.print_time(),
+                            "event_location": event.event_location,
+                            "event_type": event.event_type,
+                            "event_status": event.event_status,
+                            "event_priority": event.event_priority,
+                            "event_notes": event.event_notes,
+                            "event_reminder": event.event_reminder.strftime("%Y-%m-%d %H:%M") if event.event_reminder else None,
+                        }
+                        for event in month.get_events()
+                    ],
+                }
+                yaml.dump(data, file, default_flow_style=False)
     
     def demo_start_up(self):
         '''
@@ -274,24 +347,14 @@ class DataController:
                 return m.get_events()
         return []
     
-    
-    
 if __name__ == "__main__":
     # Create a DataController instance
-    data_controller = DataController()
+    controller = DataController()
     
-    # Print all events for January 2023
-    print("Events for January 2023:")
-    for event in data_controller.get_events(1, 2023):
-        print(event.print_event())
-    
-    # Print all events for February 2023
-    print("\nEvents for February 2023:")
-    for event in data_controller.get_events(2, 2023):
-        print(event.print_event())
-    
-    # Print all events for March 2023
-    print("\nEvents for March 2023:")
-    for event in data_controller.get_events(3, 2023):
-        print(event.print_event())
-    
+    # Print the events that it was started with
+    for month in controller._months:
+        print(f"Month: {month.get_month()}, Year: {month.get_year()}")
+        for event in month.get_events():
+            print(event)
+            
+    controller.shut_down()
