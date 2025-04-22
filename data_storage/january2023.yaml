@@ -1,0 +1,25 @@
+events:
+- event_date: '2023-01-15'
+  event_description: Soccer game
+  event_id: 1
+  event_location: Stadium
+  event_name: Soccer
+  event_notes: Bring water
+  event_priority: 1
+  event_reminder: 2023-01-14 00:00
+  event_status: Confirmed
+  event_time: '10:00'
+  event_type: Sport
+- event_date: '2023-01-22'
+  event_description: Morning yoga session
+  event_id: 4
+  event_location: Gym
+  event_name: Yoga Class
+  event_notes: Bring yoga mat
+  event_priority: 2
+  event_reminder: 2023-01-21 00:00
+  event_status: Confirmed
+  event_time: 07:00
+  event_type: Health
+month: 1
+year: 2023

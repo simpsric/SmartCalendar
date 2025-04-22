@@ -1,0 +1,25 @@
+events:
+- event_date: '2025-02-20'
+  event_description: Basketball game
+  event_id: 2
+  event_location: Arena
+  event_name: Basketball
+  event_notes: Bring water
+  event_priority: 1
+  event_reminder: 2025-02-19 00:00
+  event_status: Confirmed
+  event_time: '18:00'
+  event_type: Sport
+- event_date: '2025-02-10'
+  event_description: Monthly team meeting
+  event_id: 5
+  event_location: Office
+  event_name: Team Meeting
+  event_notes: Prepare slides
+  event_priority: 3
+  event_reminder: 2025-02-09 00:00
+  event_status: Confirmed
+  event_time: '14:00'
+  event_type: Work
+month: 2
+year: 2025

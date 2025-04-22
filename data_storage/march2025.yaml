@@ -1,0 +1,25 @@
+events:
+- event_date: '2025-03-25'
+  event_description: Doctor appointment
+  event_id: 3
+  event_location: Clinic
+  event_name: Doc Appointment
+  event_notes: Bring insurance card
+  event_priority: 1
+  event_reminder: 2025-03-24 00:00
+  event_status: Confirmed
+  event_time: 09:00
+  event_type: Health
+- event_date: '2025-03-18'
+  event_description: Friend's birthday celebration
+  event_id: 6
+  event_location: Restaurant
+  event_name: Birthday Party
+  event_notes: Buy a gift
+  event_priority: 2
+  event_reminder: 2025-03-17 00:00
+  event_status: Confirmed
+  event_time: '19:00'
+  event_type: Social
+month: 3
+year: 2025
